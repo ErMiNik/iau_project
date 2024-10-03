@@ -1,1 +1,2 @@
-###IAU PROJEKT
+### IAU PROJEKT
+## Fáza č. 1
