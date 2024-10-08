@@ -1,7 +1,7 @@
 # 1. EDA
 - celkova analyza dát
     - shape, columns, data types, missing values, duplicates, unique values
-    - .info(), .shape, .shape[0] - .dropna().shape[0], .isnull(), .isna(), .unique(),
+    - .info(), .shape, .shape[0] - .dropna().shape[0], .isnull(), .isna(), .unique(), .duplicated()
 
 - analyza atributov
     - numeric
