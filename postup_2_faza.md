@@ -6,14 +6,32 @@ Začnite s importovaním základných knižníc potrebných pre spracovanie dát
 ```python
 import pandas as pd
 from sklearn.model_selection import train_test_split
+```
+
+## 2. Načítanie dát zo súborov
+Načítajte jednotlivé datasety zo súborov .csv pomocou pandas. Predpokladajme, že vaše dátové súbory sú vo formáte CSV.
+
+```py
 connections_df = pd.read_csv('connections.csv')
 devices_df = pd.read_csv('devices.csv')
 processes_df = pd.read_csv('processes.csv')
 profiles_df = pd.read_csv('profiles.csv')
+```
+
+## 3. Rozdelenie dát na tréningovú a testovaciu množinu
+Použite train_test_split z sklearn.model_selection na rozdelenie dát každého datasetu. Nastavte pomer, napríklad 80:20, pričom random_state zaistí opakovateľnosť.
+
+```py
 connections_train, connections_test = train_test_split(connections_df, test_size=0.2, random_state=42)
 devices_train, devices_test = train_test_split(devices_df, test_size=0.2, random_state=42)
 processes_train, processes_test = train_test_split(processes_df, test_size=0.2, random_state=42)
 profiles_train, profiles_test = train_test_split(profiles_df, test_size=0.2, random_state=42)
+```
+
+## 4. Export tréningovej a testovacej množiny (voliteľné)
+Ak chcete uložiť tréningové a testovacie dáta pre ďalšie použitie, môžete ich exportovať ako nové .csv súbory.
+
+```py
 connections_train.to_csv('connections_train.csv', index=False)
 connections_test.to_csv('connections_test.csv', index=False)
 devices_train.to_csv('devices_train.csv', index=False)
@@ -23,6 +41,21 @@ processes_test.to_csv('processes_test.csv', index=False)
 profiles_train.to_csv('profiles_train.csv', index=False)
 profiles_test.to_csv('profiles_test.csv', index=False)
 ```
+
+## 5. Ďalšia analýza iba s tréningovou množinou
+Po rozdelení pracujte ďalej len s tréningovými dátami, napríklad s connections_train. Tu je príklad, ako zobraziť základné informácie a vykonať prvotnú analýzu dát.
+
+
+```py
+# Zobrazenie základných informácií o tréningovej množine
+connections_train.info()
+
+# Popis základných štatistík pre numerické stĺpce
+connections_train.describe()
+```
+
+Tento postup vám umožní bezpečne rozdeliť dáta a pracovať ďalej len s tréningovou množinou pre analytické účely.
+
 
 
 # Postup na transformáciu dát pre modelovanie strojového učenia
