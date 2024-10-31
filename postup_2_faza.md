@@ -60,6 +60,7 @@ Tento postup vám umožní bezpečne rozdeliť dáta a pracovať ďalej len s tr
 
 # Postup na transformáciu dát pre modelovanie strojového učenia
 
+
 ## 1. Identifikácia chýbajúcich hodnôt a ich spracovanie
 Začnite s identifikáciou chýbajúcich hodnôt a zvoľte stratégiu ich spracovania (napríklad doplnenie priemerom, medianom alebo odstránenie riadkov).
 
@@ -200,6 +201,58 @@ processed_data = pipeline.fit_transform(final_data)
 Skúste rôzne kombinácie (StandardScaler + PowerTransformer, MinMaxScaler + QuantileTransformer) a porovnajte efekty na pripravených dátach pre modelovanie.
 
 Každú transformáciu otestujte a analyzujte pomocou základných štatistických ukazovateľov alebo vizualizácií (napr. histogramy, boxploty), aby ste určili najlepšiu kombináciu pre konkrétne dáta a modely.
+
+# Vysvetlenie Pipeline, Scalingu a Transformácií v Kontexte Strojového Učenia
+
+## Čo je Pipeline a Načo Slúži
+
+`Pipeline` je nástroj zo `sklearn`, ktorý umožňuje definovať sekvenciu krokov predspracovania dát a modelovania v logickom a automatizovanom slede. Každý krok v pipeline môže byť transformáciou, ako je škálovanie či normalizácia, alebo modelom, ktorý sa použije na tréning. Výhodou pipeline je, že každá z operácií je aplikovaná rovnakým spôsobom na tréningovú aj testovaciu množinu, čím sa eliminuje riziko nesprávneho predspracovania alebo „úniku dát“ (data leakage).
+
+### Prečo Použiť Pipeline:
+- **Konzistentnosť**: Zabezpečuje, že všetky kroky predspracovania sú vykonané rovnako na tréningových aj testovacích dátach.
+- **Zjednodušenie kódu**: Umožňuje spracovať celý proces jedným príkazom (napríklad `pipeline.fit()` alebo `pipeline.transform()`).
+- **Prevencia úniku dát**: Parametre, ako sú priemery alebo štandardné odchýlky pre škálovanie, sú vypočítané iba na tréningovej množine a použité na testovacích dátach, čím sa zabraňuje ovplyvneniu modelu testovacími dátami.
+
+## Scaling (Škálovanie) a jeho Úloha
+
+**Scaling**, alebo škálovanie, je proces úpravy rozsahu numerických atribútov tak, aby mali porovnateľné hodnoty. To je kľúčové, pretože mnohé algoritmy strojového učenia sú citlivé na mierku dát, čo môže spôsobiť problémy, ak atribúty majú veľmi odlišné rozsahy.
+
+- **Prečo sa robí scaling**: 
+  - **Konzistentnosť dát**: Škálovanie zabezpečí, že každý atribút má rovnaký vplyv na model. Ak napríklad jeden atribút má rozsah od 0 do 1 a iný od 0 do 1000, algoritmy ako SVM, k-means a neurónové siete budú preferovať atribúty s vyššími hodnotami, čo môže viesť k chybným predikciám.
+  - **Lepší výkon modelov**: Algoritmy založené na vzdialenosti alebo gradientových výpočtoch (ako lineárna regresia, SVM alebo k-means) dosahujú vyššiu presnosť a konvergenciu, ak sú atribúty v rovnakom rozsahu.
+
+- **Kombinácie škálovania**:
+  - `StandardScaler`: Škáluje dáta tak, že priemer je 0 a štandardná odchýlka 1.
+  - `MinMaxScaler`: Premení hodnoty na rozsah od 0 do 1 alebo iný špecifikovaný rozsah.
+
+## Transformers (Transformácie) a ich Úloha
+
+**Transformácie** sa používajú na úpravu rozdelenia dát, aby boli vhodnejšie pre modelovanie. Ak atribúty vykazujú vysokú šikmosť (skewness) alebo neobvyklé rozdelenie, transformácie ako `PowerTransformer` alebo `QuantileTransformer` môžu tieto atribúty normalizovať, čím sa zlepšuje ich interpretovateľnosť a stabilita pri modelovaní.
+
+- **Prečo sa robí transformácia**:
+  - **Normalizácia rozdelenia**: Mnohé modely strojového učenia predpokladajú, že atribúty majú približne normálne rozdelenie. Transformácie upravia šikmé rozdelenie tak, aby sa lepšie hodilo na modelovanie.
+  - **Stabilita hodnotenia**: Transformácie stabilizujú atribúty, čo vedie k lepšej výkonnosti algoritmov citlivých na rozdelenie dát, napríklad Bayesovských modelov a lineárnych modelov.
+
+- **Kombinácie transformácií**:
+  - `PowerTransformer`: Používa Box-Cox alebo Yeo-Johnson transformácie na stabilizáciu rozdelenia.
+  - `QuantileTransformer`: Premení rozdelenie dát na približne normálne rozdelenie pomocou kvantilov.
+
+## Testovanie a Výber Najlepšej Kombinácie Scalingu a Transformácie
+
+Aby ste zistili, ktorá kombinácia scalingu a transformácie funguje najlepšie, môžete vyskúšať rôzne kombinácie v pipeline a analyzovať ich vplyv na výkonnosť modelu. Pri testovaní postupujte nasledovne:
+
+1. **Definujte Rôzne Kombinácie v Pipeline**:
+   Vytvorte niekoľko pipeline s rôznymi kombináciami scalingu a transformácie (napr. `StandardScaler` + `PowerTransformer`, `MinMaxScaler` + `QuantileTransformer`).
+
+2. **Vyhodnoťte Výkonnosť každej Pipeline pomocou Cross-Validation**:
+   Pre každú pipeline použite `cross-validation` na tréningových dátach a zistite, ako kombinácia scalingu a transformácie ovplyvňuje presnosť modelu.
+
+3. **Porovnajte Skóre a Výber Najlepšej Kombinácie**:
+   Na základe výsledných skóre z cross-validation vyberte kombináciu, ktorá dosiahla najvyššie skóre alebo najlepšiu stabilitu výsledkov. Týmto spôsobom zvolíte transformácie, ktoré najlepšie optimalizujú výkon vášho modelu.
+
+### Záver
+
+Scaling a transformácie sú dôležitou súčasťou predspracovania dát, pretože optimalizujú dáta pre použitie v modeloch a zabezpečujú ich konzistenciu a správnu interpretovateľnosť. Použitie pipeline na testovanie rôznych kombinácií scalingu a transformácie vám umožní vybrať tú najlepšiu možnosť, čím zlepšíte presnosť a robustnosť vášho modelu.
 
 
 # Výber Atribútov pre Strojové Učenie (Feature Selection)
