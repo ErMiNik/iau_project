@@ -1,19 +1,28 @@
-# Fáza 2 - Predspracovanie údajov: 15 bodov
-V tejto fáze sa od Vás očakáva že realizujte **predspracovanie údajov** pre strojové učenie. Výsledkom bude dátová sada (csv alebo tsv), kde jedno pozorovanie je opísané jedným riadkom.
-- **scikit-learn** vie len numerické dáta, takže niečo treba spraviť s nenumerickými dátami.
-- Replikovateľnosť predspracovania na trénovacej a testovacej množine dát, aby ste mohli zopakovať predspracovanie viackrát podľa Vašej potreby (iteratívne).
-Keď sa predspracovaním mohol zmeniť tvar a charakteristiky dát, je treba realizovať EDA opakovane podľa Vašej potreby. Bodovať techniky znovu nebudeme. Zmeny zvolených postupov dokumentujte. Problém s dátami môžete riešiť iteratívne v každej fáze a vo všetkých fázach podľa potreby.
-## 2.1 Realizácia predspracovania dát (5b).
-- (A-1b) Dáta si rozdeľte na trénovaciu a testovaciu množinu podľa vami preddefinovaného pomeru. Ďalej pracujte len **s trénovacím datasetom**.
-- (B-1b) Transformujte dáta na vhodný formát pre ML t.j. jedno pozorovanie musí byť opísané jedným riadkom a každý atribút musí byť v numerickom formáte (encoding). Iteratívne integrujte aj kroky v predspracovaní dát z prvej fázy (missing values, outlier detection) ako celok. 
-- (C-2b) Transformujte atribúty dát pre strojové učenie podľa dostupných techník minimálne: scaling (2 techniky), transformers (2 techniky) a ďalšie. Cieľom je aby ste testovali efekty a vhodne kombinovali v dátovom pipeline (od časti 2.3 a v 3. fáze). 
-- (D-1b) Zdôvodnite Vaše voľby/rozhodnutie pre realizáciu (t.j. zdokumentovanie)
-## 2.2 Výber atribútov pre strojové učenie (5b)
-- (A-3b) Zistite, ktoré atribúty (features) vo vašich dátach pre ML sú informatívne k predikovanej premennej (minimálne 3 techniky s porovnaním medzi sebou). 
-- (B-1b) Zoraďte zistené atribúty v poradí podľa dôležitosti. 
-- (C-1b) Zdôvodnite Vaše voľby/rozhodnutie pre realizáciu (t.j. zdokumentovanie)
-## 2.3 Replikovateľnosť predspracovania (5b)
-- (A-3b) Upravte váš kód realizujúci predspracovanie trénovacej množiny tak, aby ho bolo možné bez ďalších úprav znovu použiť **na predspracovanie testovacej množiny** v kontexte strojového učenia.
-- (B-2b) Využite možnosti **sklearn.pipeline**
+# Fáza 3 - Strojové učenie: 20 bodov
+Pri dátovej analýze nemusí byť naším cieľom získať len znalosti obsiahnuté v aktuálnych dátach, ale aj natrénovať model, ktorý bude schopný robiť rozumné **predikcie** pre nové pozorovania pomocou techniky **strojového učenia**. 
+## 3.1 Jednoduchý klasifikátor na základe závislosti v dátach  (5b)
+- (A-3b) Naimplementujte jednoduchý **ID3** klasifikátor s hĺbkou min 2 (vrátane root/koreň). 
+- (B-1b) Vyhodnoťte Váš ID3 klasifikátor pomocou metrík accuracy, precision a recall.
+- (C-1b) Zístite či Váš ID3 klasifikátor má overfit.
+## 3.2 Trénovanie a vyhodnotenie klasifikátorov strojového učenia (5b)
+- (A-1b) Na trénovanie využite jeden **stromový algoritmus** v scikit-learn.
+- (B-1b) Porovnajte s jedným iným **nestromovým algoritmom** v scikit-learn.
+- (C-1b) Porovnajte výsledky s ID3 z prvého kroku.
+- (D-1b) Vizualizujte natrénované pravidlá **minimálne** pre jeden Vami vybraný algoritmus
+- (E-1b) Vyhodnoťte natrénované modely pomocou metrík accuracy, precision a recall
+## 3.3 Optimalizácia alias hyperparameter tuning (5b)
+- (A-1b) Vyskúšajte rôzne nastavenie hyperparametrov (tuning) pre zvolený algoritmus tak, aby ste optimalizovali výkonnosť (bez underfitingu).
+- (B-1b) Vyskúšajte kombinácie modelov (ensemble) pre zvolený algoritmus tak, aby ste optimalizovali výkonnosť (bez **underfitingu**) . 
+- (C-1b) Využite krížovú validáciu (**cross validation**) na trénovacej množine.
+- (D-2b) Dokážte že Váš nastavený najlepší model je bez **overfitingu**.
+## 3.4 Vyhodnotenie vplyvu zvolenej stratégie riešenia na klasifikáciu (5b) 
+Vyhodnoťte Vami zvolené stratégie riešenia projektu z hľadiska classification accuracy, či sú učinné pre Váš dataset: 
+- (A-1b) Stratégie riešenia chýbajúcich hodnôt a outlierov
+- (B-1b) Dátová transformácia (scaling, transformer, …)
+- (C-1b) Výber atribútov, výber algoritmov, hyperparameter tuning, ensemble learning
+- (D-1b) Ktorý model je Váš **najlepší model** pre nasadenie (deployment)? 
+- (E-1b) Aký je **data pipeline** pre jeho vybudovanie na základe Vášho datasetu **v produkcii**?
 
-**Správa sa odovzdáva v 7. týždni semestra**. Dvojica svojmu cvičiacemu odprezentuje vykonanú fázu v notebooku podľa potreby na cvičení. Uveďte percentuálny podiel práce členov dvojice. Následne správu elektronicky odovzdá **jeden člen z dvojice** do systému **AIS** do nedele **03.11.2024 23:59**.
+**Všetky hodnotenia podložte dôkazmi**. Najlepší model má byť stabilný, bez overfitu a bez underfitu. Jeho data pipeline má byť dodaný s metadátami, ak tie metadáta sú potrebné a vyrobené v developmente. 
+
+Správa sa odovzdáva v 10. týždni semestra. Dvojica svojmu cvičiacemu odprezentuje vykonanú fázu v Jupyter Notebooku podľa potreby na cvičení. V notebooku uveďte percentuálny podiel práce členov dvojice. Následne správu elektronicky odovzdá jeden člen z dvojice do systému AIS do nedele 24.11.2024 23:59.​​
