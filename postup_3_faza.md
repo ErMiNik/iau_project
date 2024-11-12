@@ -6,6 +6,77 @@ V tejto časti vytvoríme jednoduchý klasifikátor na základe algoritmu ID3, v
 
 ## (A-3b) Implementácia ID3 Klasifikátora s Hĺbkou min. 2
 
+# Čo je ID3 Klasifikátor
+
+**ID3 (Iterative Dichotomiser 3)** je algoritmus na tvorbu rozhodovacích stromov, ktorý bol predstavený Rossom Quinlanom v roku 1986. Používa sa na klasifikačné problémy a funguje na základe výberu najlepších atribútov na každom kroku výstavby stromu. Tento výber je založený na metrikách, ako sú **entropia** a **informačný zisk**.
+
+---
+
+## Kľúčové Pojmy ID3
+
+1. **Entropia**: Meria neusporiadanosť alebo neistotu v dátach. Čím je entropia nižšia, tým homogénnejšia je trieda.
+   \[
+   H(S) = -\sum_{i=1}^n p_i \log_2(p_i)
+   \]
+   kde \( p_i \) je pravdepodobnosť triedy \( i \).
+
+2. **Informačný zisk (Information Gain)**: Meria, o koľko sa zníži entropia po rozdelení dát podľa konkrétneho atribútu.
+   \[
+   IG(S, A) = H(S) - \sum_{v \in V(A)} \frac{|S_v|}{|S|} H(S_v)
+   \]
+   kde \( S_v \) je podmnožina \( S \), ktorá obsahuje všetky vzorky s hodnotou \( v \) pre atribút \( A \).
+
+3. **Rozhodovací strom**: Stromová štruktúra, kde každý uzol predstavuje atribút a každá vetva odpovedá hodnote atribútu. Listy stromu reprezentujú triedy.
+
+---
+
+## Pseudo Kód ID3 Algoritmu
+
+1. **Vstupy**:
+   - Dataset \( D \) obsahujúci príklady a ich atribúty.
+   - Cieľová premenná \( Y \) (napr. trieda, ktorú chceme predikovať).
+
+2. **Výstup**:
+   - Rozhodovací strom.
+
+3. **Postup**:
+
+ID3(D, Y, A):
+1. Ak všetky vzorky v D patria do jednej triedy, vráť listový uzol s touto triedou.
+2. Ak je A (množina atribútov) prázdna, vráť listový uzol s najčastejšou triedou v D.
+3. Vyber atribút A_best z A, ktorý maximalizuje Information Gain pre D.
+4. Vytvor nový uzol pre A_best.
+5. Pre každú hodnotu v z A_best: a. Vytvor podmnožinu D_v z D, kde A_best = v. b. Ak je D_v prázdne: - Pridaj listový uzol s najčastejšou triedou z D. c. Inak: - Rekurzívne zavolaj ID3(D_v, Y, A - {A_best}) a pripoj podstrom k uzlu A_best.
+6. Vráť strom.
+
+---
+
+## Vysvetlenie Algoritmu
+
+- Algoritmus začína s koreňovým uzlom, ktorý reprezentuje celý dataset.
+- Vyberá sa atribút, ktorý poskytuje najvyšší informačný zisk.
+- Dataset sa rozdelí na podmnožiny podľa hodnôt vybraného atribútu.
+- Proces sa rekurzívne opakuje, kým:
+- Všetky príklady v podmnožine patria do jednej triedy.
+- Alebo nie sú k dispozícii žiadne ďalšie atribúty na rozdelenie.
+
+---
+
+## Príklad Použitia
+
+Ak máte dataset so vzorkami, kde cieľová premenná je `mwra`, ID3 algoritmus iteratívne vyberie atribúty, ktoré najlepšie oddeľujú triedy (napr. `mwra = 0` a `mwra = 1`), čím vytvorí rozhodovací strom na predikciu novej vzorky.
+
+Príklad rozhodovacieho stromu:
+```
+A_best: c.katana
+
+Value: High -> Class: mwra=1
+Value: Low -> Subtree: A_second: p.android.gm - Value: Yes -> Class: mwra=0 - Value: No -> Class: mwra=1
+```
+
+Tento strom predikuje triedy na základe hodnôt atribútov `c.katana` a `p.android.gm`. Takýto jednoduchý model je ľahko interpretovateľný a vhodný pre malé až stredne veľké datasety.
+
+
 Algoritmus ID3 (Iterative Dichotomiser 3) vytvára rozhodovacie stromy na základe entropie a informačného zisku. Nasledujú kroky na implementáciu ID3 klasifikátora:
 1. **Rozdeľte dáta na tréningovú a testovaciu množinu.**
 2. **Implementujte výpočet entropie a informačného zisku.**
